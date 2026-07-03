@@ -5,7 +5,13 @@ use std::fs;
 use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
-use tauri::Emitter;
+use tauri::{Emitter, Manager};
+
+#[cfg(target_os = "windows")]
+use std::os::windows::process::CommandExt;
+
+#[cfg(target_os = "windows")]
+const CREATE_NO_WINDOW: u32 = 0x08000000;
 
 #[derive(Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -78,11 +84,50 @@ fn project_root() -> Result<PathBuf, String> {
     }
 }
 
-fn node_command() -> Command {
-    Command::new("node")
+fn dev_runtime_root() -> Result<Option<PathBuf>, String> {
+    let root = project_root()?;
+    if root.join("scripts").join("process-image.mjs").exists() {
+        Ok(Some(root))
+    } else {
+        Ok(None)
+    }
+}
+
+fn runtime_root(app: &tauri::AppHandle) -> Result<PathBuf, String> {
+    if let Some(root) = dev_runtime_root()? {
+        Ok(root)
+    } else {
+        app.path().resource_dir().map_err(|err| err.to_string())
+    }
+}
+
+fn runtime_output_dir(app: &tauri::AppHandle) -> Result<PathBuf, String> {
+    if let Some(root) = dev_runtime_root()? {
+        Ok(root.join("output"))
+    } else {
+        app.path()
+            .app_local_data_dir()
+            .map(|path| path.join("output"))
+            .map_err(|err| err.to_string())
+    }
+}
+
+fn node_executable(root: &Path) -> PathBuf {
+    let bundled = if cfg!(target_os = "windows") {
+        root.join("bin").join("node.exe")
+    } else {
+        root.join("bin").join("node")
+    };
+
+    if bundled.exists() {
+        bundled
+    } else {
+        PathBuf::from("node")
+    }
 }
 
 fn process_image_sync(
+    app: tauri::AppHandle,
     window: tauri::Window,
     input_path: String,
     output_name: Option<String>,
@@ -90,10 +135,11 @@ fn process_image_sync(
     radius: Option<u32>,
     fast_animated: bool,
 ) -> Result<ProcessResult, String> {
-    let root = project_root()?;
+    let root = runtime_root(&app)?;
+    let output_dir = runtime_output_dir(&app)?;
     let script_path = root.join("scripts").join("process-image.mjs");
 
-    let mut command = node_command();
+    let mut command = Command::new(node_executable(&root));
     command.arg(script_path);
     command.arg(input_path);
     command.arg(output_name.unwrap_or_default());
@@ -101,8 +147,12 @@ fn process_image_sync(
     command.arg(radius.map(|value| value.to_string()).unwrap_or_default());
     command.arg(if fast_animated { "true" } else { "false" });
     command.current_dir(&root);
+    command.env("DWIF_RUNTIME_ROOT", &root);
+    command.env("DWIF_OUTPUT_DIR", &output_dir);
     command.stdout(Stdio::piped());
     command.stderr(Stdio::piped());
+    #[cfg(target_os = "windows")]
+    command.creation_flags(CREATE_NO_WINDOW);
 
     let mut child = command.spawn().map_err(|err| {
         format!(
@@ -253,6 +303,7 @@ async fn process_image(
 ) -> Result<ProcessResult, String> {
     tauri::async_runtime::spawn_blocking(move || {
         process_image_sync(
+            window.app_handle().clone(),
             window,
             input_path,
             output_name,

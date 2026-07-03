@@ -1,5 +1,7 @@
 node_modules/
 src-tauri/target/
+release/
+vendor/
 *-resized.png
 output/*
 !output/.gitkeep
