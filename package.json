@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node index.mjs",
-    "tauri:dev": "tauri dev",
-    "tauri:build": "node scripts/prepare-bundled-node.mjs && tauri build"
+    "tauri:dev": "node scripts/run-tauri.mjs dev",
+    "tauri:build": "node scripts/run-tauri.mjs build"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.8.0",

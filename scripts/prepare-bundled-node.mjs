@@ -7,15 +7,18 @@ const vendorDir = path.join(rootDir, "vendor");
 const platform = process.platform;
 
 async function main() {
-  if (platform !== "win32") {
+  if (platform !== "win32" && platform !== "linux") {
     return;
   }
 
   const sourceNodePath = process.execPath;
-  const targetNodePath = path.join(vendorDir, "node.exe");
+  const targetNodePath = path.join(vendorDir, platform === "win32" ? "node.exe" : "node");
 
   await fs.mkdir(vendorDir, { recursive: true });
   await fs.copyFile(sourceNodePath, targetNodePath);
+  if (platform !== "win32") {
+    await fs.chmod(targetNodePath, 0o755);
+  }
 }
 
 main().catch((error) => {

@@ -35,8 +35,7 @@
       "../node_modules/": "node_modules/",
       "../input/": "input/",
       "../output/": "output/",
-      "../package.json": "package.json",
-      "../vendor/node.exe": "bin/node.exe"
+      "../package.json": "package.json"
     },
     "icon": [
       "icons/32x32.png",

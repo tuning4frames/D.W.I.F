@@ -120,7 +120,7 @@ button:disabled:hover {
   padding: 0;
 }
 
-/* ── Title bar ── */
+/* â”€â”€ Title bar â”€â”€ */
 
 .titlebar {
   display: flex;
@@ -210,7 +210,8 @@ body[data-runtime="browser"] .titlebar {
   background: #b91c1c;
 }
 
-/* ── Main content ── */
+
+/* â”€â”€ Main content â”€â”€ */
 
 .content {
   flex: 1;
@@ -222,7 +223,7 @@ body[data-runtime="browser"] .titlebar {
   min-height: 0;
 }
 
-/* ── Preview ── */
+/* â”€â”€ Preview â”€â”€ */
 
 .preview-wrap {
   flex: 1 1 auto;
@@ -336,7 +337,7 @@ body[data-runtime="browser"] .titlebar {
   }
 }
 
-/* ── Controls bar ── */
+/* â”€â”€ Controls bar â”€â”€ */
 
 .controls {
   display: grid;
@@ -347,7 +348,7 @@ body[data-runtime="browser"] .titlebar {
 
 .toolbar {
   display: grid;
-  grid-template-columns: minmax(0, 1.9fr) minmax(0, 1.1fr) 150px 150px auto;
+  grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr) 120px 120px auto;
   align-items: center;
   gap: 10px;
 }
@@ -388,6 +389,128 @@ body[data-runtime="browser"] .titlebar {
   width: 100%;
 }
 
+/* â”€â”€ Advanced toggle button â”€â”€ */
+
+.advanced-toggle-btn {
+  width: 15px;
+  height: 15px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #52525b;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  cursor: pointer;
+  transition: color 0.15s ease;
+  align-self: end;
+  margin-bottom: 8px;
+  margin-left: auto;
+  margin-right: 2px;
+  flex: 0 0 auto;
+}
+
+.advanced-toggle-btn:hover {
+  color: #7c3aed;
+  background: transparent;
+}
+
+.advanced-toggle-btn[aria-pressed="true"] {
+  color: #7c3aed;
+  background: transparent;
+}
+
+.advanced-toggle-btn svg {
+  display: block;
+}
+
+/* â”€â”€ Advanced panel â”€â”€ */
+
+.advanced-panel {
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.25s ease, opacity 0.18s ease;
+  overflow: hidden;
+}
+
+.advanced-panel--open {
+  max-height: 48px;
+  opacity: 1;
+}
+
+.advanced-panel-inner {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 0 0 2px 2px;
+}
+
+/* â”€â”€ Advanced item (toggle row) â”€â”€ */
+
+.advanced-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  padding: 4px 0;
+}
+
+.advanced-label {
+  font-size: 12px;
+  color: #a1a1aa;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+/* â”€â”€ Toggle switch â”€â”€ */
+
+.toggle-switch {
+  position: relative;
+  width: 34px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: #27272a;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.toggle-slider::before {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  left: 3px;
+  top: 3px;
+  background: #71717a;
+  border-radius: 999px;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background: #7c3aed;
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(14px);
+  background: #fafafa;
+}
+
 .control-actions {
   display: flex;
   gap: 6px;
@@ -401,7 +524,11 @@ body[data-runtime="browser"] .titlebar {
   min-width: 108px;
 }
 
-/* ── Status ── */
+.control-actions .advanced-toggle-btn {
+  min-width: 0;
+}
+
+/* â”€â”€ Status â”€â”€ */
 
 .status {
   flex-shrink: 0;

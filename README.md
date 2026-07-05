@@ -12,6 +12,10 @@
 </p>
 
 <p align="center">
+  <a href="./docs/SETUP.md">Setup Guide</a> | <a href="./docs/SIMPLE_GUIDE.md">Simple Guide</a>
+</p>
+
+<p align="center">
   Small image fixer for adding a transparent top strip and rounded top-right corner to Discord widget images, with both a CLI and a Tauri desktop UI.
 </p>
 
@@ -30,12 +34,21 @@ Desktop UI requirements:
 - Node.js 18+
 - Rust toolchain
 - Visual Studio Build Tools with Desktop development with C++ on Windows
+- `gifski` installed separately if you want the highest-quality GIF export path
 
 Install dependencies:
 
 ```bash
 npm install
 ```
+
+Helper setup scripts:
+
+- Windows: `powershell -ExecutionPolicy Bypass -File .\scripts\install-deps-windows.ps1`
+- Linux: `bash ./scripts/install-deps-linux.sh`
+- macOS: `bash ./scripts/install-deps-macos.sh`
+
+There is also a short setup guide at [docs/SETUP.md](/C:/Users/Tuner/Documents/D.W.I.F/docs/SETUP.md).
 
 ## Desktop UI
 
@@ -63,7 +76,9 @@ Notes:
 - animated previews may be limited depending on the file and platform
 - animated processing now reports frame-by-frame progress in the UI
 - the desktop app now uses the faster animated export path by default
-- generated files are still written to the local `output/` folder first
+- in `tauri:dev`, generated files are written to the local `output/` folder first
+- in a packaged desktop build, generated files are written to the app's local data folder before you save a copy elsewhere
+- the highest-quality GIF preset uses `gifski`; if it is not installed, use a lower preset or set `DWIF_GIFSKI_PATH`
 
 Build a desktop bundle:
 

@@ -134,6 +134,7 @@ fn process_image_sync(
     top_strip: Option<u32>,
     radius: Option<u32>,
     fast_animated: bool,
+    encoding_config: Option<String>,
 ) -> Result<ProcessResult, String> {
     let root = runtime_root(&app)?;
     let output_dir = runtime_output_dir(&app)?;
@@ -146,6 +147,7 @@ fn process_image_sync(
     command.arg(top_strip.map(|value| value.to_string()).unwrap_or_default());
     command.arg(radius.map(|value| value.to_string()).unwrap_or_default());
     command.arg(if fast_animated { "true" } else { "false" });
+    command.arg(encoding_config.unwrap_or_default());
     command.current_dir(&root);
     command.env("DWIF_RUNTIME_ROOT", &root);
     command.env("DWIF_OUTPUT_DIR", &output_dir);
@@ -300,6 +302,7 @@ async fn process_image(
     top_strip: Option<u32>,
     radius: Option<u32>,
     fast_animated: Option<bool>,
+    encoding_config: Option<String>,
 ) -> Result<ProcessResult, String> {
     tauri::async_runtime::spawn_blocking(move || {
         process_image_sync(
@@ -310,6 +313,7 @@ async fn process_image(
             top_strip,
             radius,
             fast_animated.unwrap_or(true),
+            encoding_config,
         )
     })
     .await

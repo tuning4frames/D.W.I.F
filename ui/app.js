@@ -15,7 +15,10 @@ const inputPath = document.querySelector("#inputPath");
 const outputName = document.querySelector("#outputName");
 const topStrip = document.querySelector("#topStrip");
 const radius = document.querySelector("#radius");
+const highQualityAnimated = document.querySelector("#highQualityAnimated");
 const browseButton = document.querySelector("#browseButton");
+const advancedToggleBtn = document.querySelector("#advancedToggleBtn");
+const advancedPanel = document.querySelector("#advancedPanel");
 const processButton = document.querySelector("#processButton");
 const downloadButton = document.querySelector("#downloadButton");
 const status = document.querySelector("#status");
@@ -494,6 +497,11 @@ browseButton.addEventListener("click", async () => {
   }
 });
 
+advancedToggleBtn.addEventListener("click", () => {
+  const isOpen = advancedPanel.classList.toggle("advanced-panel--open");
+  advancedToggleBtn.setAttribute("aria-pressed", String(isOpen));
+});
+
 processButton.addEventListener("click", async () => {
   if (!inputPath.value) {
     setStatus("Choose an input image first.", "error");
@@ -519,7 +527,7 @@ processButton.addEventListener("click", async () => {
         outputName: outputName.value.trim() || null,
         topStrip: topStrip.value === "" ? null : Number.parseInt(topStrip.value, 10),
         radius: radius.value === "" ? null : Number.parseInt(radius.value, 10),
-        fastAnimated: true
+        fastAnimated: !highQualityAnimated.checked
       });
     } else {
       if (!selectedBrowserFile) {

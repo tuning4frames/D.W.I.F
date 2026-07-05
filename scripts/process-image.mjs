@@ -7,7 +7,7 @@ import {
 } from "../lib/dwif.mjs";
 
 async function main() {
-  const [, , rawInputPath, rawOutputName, rawTopStrip, rawRadius, rawFastAnimated] = process.argv;
+  const [, , rawInputPath, rawOutputName, rawTopStrip, rawRadius, rawFastAnimated, rawEncodingConfig] = process.argv;
 
   if (!rawInputPath) {
     throw new Error("Input image path is required.");
@@ -22,6 +22,7 @@ async function main() {
     manualTopStrip: parseOptionalNumber(rawTopStrip, "top-strip"),
     manualRadius: parseOptionalNumber(rawRadius, "radius"),
     fastAnimated: rawFastAnimated !== "false",
+    encodingConfig: rawEncodingConfig ? JSON.parse(rawEncodingConfig) : null,
     onProgress(progress) {
       process.stdout.write(`${JSON.stringify({ type: "progress", ...progress })}\n`);
     }

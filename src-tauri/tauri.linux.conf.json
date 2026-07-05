@@ -1,0 +1,7 @@
+{
+  "bundle": {
+    "resources": {
+      "../vendor/node": "bin/node"
+    }
+  }
+}
