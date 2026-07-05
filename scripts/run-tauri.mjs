@@ -35,6 +35,10 @@ if (process.platform !== "win32") {
   env.PKG_CONFIG ??= "/usr/bin/pkg-config";
 }
 
+if (process.platform === "linux") {
+  env.APPIMAGE_EXTRACT_AND_RUN ??= "1";
+}
+
 process.exit(await runBin(command, extraArgs, env));
 
 function runNodeScript(relativePath) {
