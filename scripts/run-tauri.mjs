@@ -5,9 +5,10 @@ import { fileURLToPath } from "node:url";
 
 const validCommands = new Set(["dev", "build"]);
 const command = process.argv[2];
+const extraArgs = process.argv.slice(3);
 
 if (!validCommands.has(command)) {
-  console.error("Usage: node scripts/run-tauri.mjs <dev|build>");
+  console.error("Usage: node scripts/run-tauri.mjs <dev|build> [...args]");
   process.exit(1);
 }
 
@@ -34,7 +35,7 @@ if (process.platform !== "win32") {
   env.PKG_CONFIG ??= "/usr/bin/pkg-config";
 }
 
-process.exit(await runBin(command, env));
+process.exit(await runBin(command, extraArgs, env));
 
 function runNodeScript(relativePath) {
   return new Promise((resolve) => {
@@ -48,7 +49,7 @@ function runNodeScript(relativePath) {
   });
 }
 
-function runBin(subcommand, env) {
+function runBin(subcommand, extraArgs, env) {
   return new Promise((resolve) => {
     const tauriBin = path.join(
       rootDir,
@@ -65,12 +66,12 @@ function runBin(subcommand, env) {
 
     const child =
       process.platform === "win32"
-        ? spawn(process.env.ComSpec ?? "cmd.exe", ["/d", "/s", "/c", `${tauriBin} ${subcommand}`], {
+        ? spawn(process.env.ComSpec ?? "cmd.exe", ["/d", "/s", "/c", `${tauriBin} ${subcommand}${extraArgs.length ? " " + extraArgs.join(" ") : ""}`], {
             cwd: rootDir,
             env,
             stdio: "inherit"
           })
-        : spawn(tauriBin, [subcommand], {
+        : spawn(tauriBin, [subcommand, ...extraArgs], {
             cwd: rootDir,
             env,
             stdio: "inherit"
