@@ -23,7 +23,11 @@
   <img src="../assets/before-after.webp" alt="Before and after preview of D.W.I.F. fixing a Discord widget image">
 </p>
 
-This is the fuller setup page for D.W.I.F. Use this one if you want the exact install flow and the extra notes.
+This is the fuller setup page for D.W.I.F. Use this one if you want the exact development setup flow and the extra notes.
+
+## Regular Use
+
+If you just want to run the app, use a prebuilt bundle from GitHub Releases. Those desktop builds include the app and its bundled Node runtime, so you do not need Node.js, Rust, or local compiler toolchains on the target machine.
 
 ## What You Need
 
@@ -73,6 +77,12 @@ npm run tauri:build
 - Linux package names vary by distro; the Linux script covers Debian/Ubuntu first and falls back to Fedora and Arch style installs when available.
 - macOS builds require Xcode Command Line Tools.
 - `gifski` is optional unless you want the highest-quality GIF preset.
+
+## Publishing Releases
+
+Push a version tag such as `v1.0.0` to trigger the GitHub Actions release workflow. It builds Tauri bundles for Windows and Linux and uploads them to a draft GitHub Release.
+
+The app does not depend on ImageMagick. `gifski` is only relevant for the highest GIF presets.
 
 ## Short Version
 

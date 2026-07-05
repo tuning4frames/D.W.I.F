@@ -27,11 +27,17 @@ This is the shortest version.
 
 ## Do This
 
-1. Download the repo as a ZIP.
-2. Extract it.
-3. Open the extracted `D.W.I.F` folder.
-4. Open a terminal in that folder.
-5. Run the setup script for your platform:
+1. Open GitHub Releases.
+2. Download the build for your platform.
+3. Run the installer or extracted app bundle.
+
+That is the normal user path.
+
+## If You Are Developing
+
+1. Clone the repo.
+2. Open a terminal in the repo folder.
+3. Run the setup script for your platform:
 
 ```bash
 # Windows
@@ -44,9 +50,7 @@ bash ./scripts/install-deps-linux.sh
 bash ./scripts/install-deps-macos.sh
 ```
 
-6. If the script runs fully inside the repo folder, it should install what is needed, run `npm install`, and then open the app with `npm run tauri:dev`.
-
-7. If it only installs prerequisites, run this yourself:
+4. Then run:
 
 ```bash
 npm install
