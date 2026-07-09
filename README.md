@@ -7,7 +7,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/node-18%2B-339933?style=flat-square&logo=node.js&logoColor=white" alt="Node 18+">
   <img src="https://img.shields.io/badge/tauri-v2-24c8db?style=flat-square" alt="Tauri v2">
-  <img src="https://img.shields.io/badge/output-PNG%20%7C%20WEBP%20%7C%20GIF-8A2BE2?style=flat-square" alt="PNG, WEBP, and GIF output">
+  <img src="https://img.shields.io/badge/output-PNG%20%7C%20WEBP%20%7C%20GIF%20%7C%20AVIF-8A2BE2?style=flat-square" alt="PNG, WEBP, GIF, and AVIF output">
   <img src="https://img.shields.io/badge/auto%20sizing-enabled-4C9A2A?style=flat-square" alt="Auto sizing enabled">
 </p>
 
@@ -33,6 +33,7 @@ Source setup is only for development:
 - Rust toolchain
 - Visual Studio Build Tools with Desktop development with C++ on Windows
 - Optional: `gifski` if you want the highest-quality GIF preset instead of the built-in encoder
+- Optional: `ImageMagick` (with AVIF/H.265 support) for experimental AVIF output and AVIF decode fallback
 
 Development install:
 
@@ -76,7 +77,7 @@ Notes:
 - the desktop app now uses the faster animated export path by default
 - in `tauri:dev`, generated files are written to the local `output/` folder first
 - in a packaged desktop build, generated files are written to the app's local data folder before you save a copy elsewhere
-- ImageMagick is not required by the app
+- ImageMagick is required for experimental AVIF output and is used as an AVIF decoder fallback
 - the highest-quality GIF preset uses `gifski`; if it is not bundled or installed, use a lower preset or set `DWIF_GIFSKI_PATH`
 
 Build a desktop bundle:
@@ -153,8 +154,8 @@ node index.mjs --help
 - Output format follows the output file extension: `.png`, `.webp`, or `.gif`.
 - Transparent WEBP files are supported.
 - Animated WEBP and GIF files keep their animation frames.
-- Animated output currently supports `.webp` and `.gif`.
-- Experimental AVIF input uses a temporary lossless WEBP bridge during processing and finalizes `.avif` with ImageMagick.
+- Animated output currently supports `.webp`, `.gif`, and experimental `.avif`.
+- Experimental AVIF support uses a temporary lossless WEBP bridge and finalizes `.avif` with ImageMagick. ImageMagick is also used as a fallback decoder when Sharp cannot read certain AVIF files.
 - Faster animated export settings are enabled by default. GIF output still has harder edges than WEBP because GIF transparency is only 1-bit.
 - The original image size is preserved.
 - Auto sizing is calibrated from:

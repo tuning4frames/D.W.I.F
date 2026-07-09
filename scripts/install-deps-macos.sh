@@ -23,7 +23,7 @@ if ! command -v brew >/dev/null 2>&1; then
 fi
 
 brew update
-brew install node rust gifski
+brew install node rust imagemagick gifski
 
 if [[ -f "./package.json" ]]; then
   log ""

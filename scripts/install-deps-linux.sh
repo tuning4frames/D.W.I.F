@@ -14,7 +14,8 @@ install_debian() {
     libgtk-3-dev \
     libwebkit2gtk-4.1-dev \
     libayatana-appindicator3-dev \
-    librsvg2-dev
+    librsvg2-dev \
+    imagemagick
 }
 
 install_fedora() {
@@ -26,7 +27,8 @@ install_fedora() {
     gtk3-devel \
     webkit2gtk4.1-devel \
     libappindicator-gtk3-devel \
-    librsvg2-devel
+    librsvg2-devel \
+    ImageMagick
 }
 
 install_arch() {
@@ -37,7 +39,8 @@ install_arch() {
     gtk3 \
     webkit2gtk-4.1 \
     libappindicator-gtk3 \
-    librsvg
+    librsvg \
+    imagemagick
 }
 
 if command -v apt-get >/dev/null 2>&1; then
