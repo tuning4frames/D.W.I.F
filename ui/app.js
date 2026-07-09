@@ -160,7 +160,7 @@ function getSuggestedOutputName(filePath) {
   const extension = extensionMatch?.[0]?.toLowerCase() ?? ".png";
   const stem = fileName.replace(/\.[^.]+$/, "");
   if (extension === ".avif") {
-    return `${stem}-resized.webp`;
+    return `${stem}-resized.avif`;
   }
   return `${stem}-resized${extension}`;
 }
