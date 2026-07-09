@@ -25,6 +25,7 @@ Notes:
   - Output always goes into the local output folder.
   - Output format follows the output file extension: .png, .webp, or .gif.
   - Animated output is supported for .webp and .gif.
+  - Experimental AVIF input uses a temporary lossless WEBP bridge and currently exports .webp.
   - The auto sizing is calibrated from 512x512 -> 17/36 and 1844x853 -> 54/172.
 `);
 }

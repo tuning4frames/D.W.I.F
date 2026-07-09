@@ -159,6 +159,9 @@ function getSuggestedOutputName(filePath) {
   const extensionMatch = fileName.match(/\.[^.]+$/);
   const extension = extensionMatch?.[0]?.toLowerCase() ?? ".png";
   const stem = fileName.replace(/\.[^.]+$/, "");
+  if (extension === ".avif") {
+    return `${stem}-resized.webp`;
+  }
   return `${stem}-resized${extension}`;
 }
 
@@ -172,6 +175,10 @@ function isGifInput(filePath) {
 
 function isWebpInput(filePath) {
   return /\.webp$/i.test(filePath);
+}
+
+function isAvifInput(filePath) {
+  return /\.avif$/i.test(filePath);
 }
 
 function getAutoValue(baseValue, exponent, width, height) {
@@ -243,7 +250,7 @@ async function openFileDialog() {
       filters: [
         {
           name: "Images",
-          extensions: ["png", "jpg", "jpeg", "webp", "gif"]
+          extensions: ["png", "jpg", "jpeg", "webp", "gif", "avif"]
         }
       ]
     });
@@ -263,7 +270,7 @@ async function saveFileDialog(defaultPath) {
       filters: [
         {
           name: "Images",
-          extensions: ["png", "jpg", "jpeg", "webp", "gif"]
+          extensions: ["png", "jpg", "jpeg", "webp", "gif", "avif"]
         }
       ]
     });
@@ -288,13 +295,20 @@ async function attachProgressListener() {
 
   unlistenProgress = await runtime.listen("process-progress", (event) => {
     const payload = event.payload ?? {};
-    const rawStage = payload.stage === "encoding" ? "encoding" : "preparing";
+    const rawStage = ["encoding", "avif-bridge"].includes(payload.stage)
+      ? payload.stage
+      : "preparing";
     const rawCurrent = Number(payload.current ?? 0);
     const rawPercent = Number(payload.percent ?? 0);
     const stageChanged = lastProgressStage && lastProgressStage !== rawStage;
     const current = stageChanged ? rawCurrent : Math.max(lastProgressCurrent, rawCurrent);
     const percent = stageChanged ? rawPercent : Math.max(lastProgressPercent, rawPercent);
-    const stage = rawStage === "encoding" ? "Encoding frames" : "Preparing frames";
+    const stage =
+      rawStage === "encoding"
+        ? "Encoding frames"
+        : rawStage === "avif-bridge"
+          ? "Bridging AVIF"
+          : "Preparing frames";
     const label = payload.total
       ? `${stage} ${current}/${payload.total} (${percent}%)`
       : `${stage} ${percent}%`;
@@ -477,11 +491,13 @@ browseButton.addEventListener("click", async () => {
     previewBaseMeta =
       runtime.kind === "browser" && isGifInput(inputPath.value)
         ? "Previewing selected image. GIF animation processing is only available in the desktop app."
-        : runtime.kind === "browser" && isWebpInput(inputPath.value)
-          ? "Previewing selected image. Browser mode exports WEBP as a still image."
-          : looksAnimatedInput(inputPath.value)
-        ? "Previewing selected image. Animated previews may be limited."
-        : "Previewing selected image.";
+        : runtime.kind === "browser" && isAvifInput(inputPath.value)
+          ? "Previewing selected image. AVIF processing is experimental and only available in the desktop app."
+          : runtime.kind === "browser" && isWebpInput(inputPath.value)
+            ? "Previewing selected image. Browser mode exports WEBP as a still image."
+            : looksAnimatedInput(inputPath.value)
+              ? "Previewing selected image. Animated previews may be limited."
+              : "Previewing selected image.";
 
     updateTitlebarStatus();
     await setPreview(

@@ -279,6 +279,7 @@ fn guess_mime(path: &Path) -> &'static str {
         Some("jpg") | Some("jpeg") => "image/jpeg",
         Some("gif") => "image/gif",
         Some("webp") => "image/webp",
+        Some("avif") => "image/avif",
         _ => "application/octet-stream",
     }
 }

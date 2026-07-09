@@ -58,7 +58,7 @@ npm run tauri:dev
 
 The desktop UI includes:
 
-- file picker for PNG, JPG, WEBP, and GIF files
+- file picker for PNG, JPG, WEBP, GIF, and experimental AVIF files
 - live preview area
 - loading spinner and animated processing progress bar
 - fast animated processing enabled by default
@@ -154,6 +154,7 @@ node index.mjs --help
 - Transparent WEBP files are supported.
 - Animated WEBP and GIF files keep their animation frames.
 - Animated output currently supports `.webp` and `.gif`.
+- Experimental AVIF input uses a temporary lossless WEBP bridge during processing and currently exports `.webp`.
 - Faster animated export settings are enabled by default. GIF output still has harder edges than WEBP because GIF transparency is only 1-bit.
 - The original image size is preserved.
 - Auto sizing is calibrated from:
