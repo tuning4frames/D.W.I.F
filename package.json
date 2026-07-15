@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node index.mjs",
+    "test": "node --test",
     "tauri:dev": "node scripts/run-tauri.mjs dev",
     "tauri:build": "node scripts/run-tauri.mjs build"
   },
