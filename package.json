@@ -1,6 +1,6 @@
 {
   "name": "dwif",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "private": true,
   "description": "D.W.I.F. - Discord Widget Image Fixer.",
   "type": "module",
